@@ -1,3 +1,4 @@
+import { useRef, useState } from "react";
 import style from "./index.module.css"
 
 const clamp = function (value: number, min: number, max: number) {
@@ -15,13 +16,22 @@ export default function Workflows() {
     ]
     const description = `Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et ma`
 
+    const descInput = useRef<HTMLTextAreaElement>(null)
+
+    const [descFontSize, setDescFontSize] = useState(18)
+
     const titleLength = title.join("").length
 
-    // title max 100 characters
+    const titleFontSize = 10
 
-    const titleFontSize = titleLength
+    function updateFontSize() {
 
-    const descFontSize = 10
+        const descLength = descInput.current?.value.length ?? 0
+
+        setDescFontSize(clamp(1000 / descLength, 14, 18))
+
+        console.log(descFontSize)
+    }
 
     return <div className={style.container}>
 
@@ -38,7 +48,20 @@ export default function Workflows() {
                     {<span>{title[2]}</span>}
                 </div>
 
-                <span style={{ fontSize: descFontSize }}>{description}</span>
+                <textarea
+                    ref={descInput}
+                    style={{
+                        fontSize: descFontSize,
+                        width: "100%",
+                        height: "100%",
+                        background: "none",
+                        outline: "none",
+                        border: "none",
+                        color: "#222",
+                        fontFamily: "inherit"
+                    }}
+                    onChange={updateFontSize}
+                />
             </div>
         </div>
     </div>
